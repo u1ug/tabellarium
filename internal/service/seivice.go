@@ -2,15 +2,16 @@ package service
 
 import (
 	"context"
-	"fmt"
-	"github.com/streadway/amqp"
+	amqp "github.com/rabbitmq/amqp091-go"
+	"tabellarium/internal/entities"
+	"tabellarium/pkg/logging"
 	"tabellarium/pkg/message_queue"
 )
 
 // Notificator defines the interface for notification operations.
 type Notificator interface {
 	Listen() error
-	Push(n Notification) error
+	push(n entities.Notification) error
 	Close() error
 }
 
@@ -20,17 +21,17 @@ type NotificationService struct {
 	cancel   context.CancelFunc
 	consumer *message_queue.Consumer
 	settings Settings
+	logger   *logging.Logger
 }
 
 // Settings holds the configuration for the NotificationService.
 type Settings struct {
-	ServiceHostname string
-	Queue           string
-	MaxHandlers     int64
-	MQUsername      string
-	MQPassword      string
-	MQHostName      string
-	MQPort          int
+	Queue       string
+	MaxHandlers int64
+	MQUsername  string
+	MQPassword  string
+	MQHostName  string
+	MQPort      int
 }
 
 // NewNotificationService initializes a new NotificationService with the given settings.
@@ -41,23 +42,25 @@ func NewNotificationService(s Settings) *NotificationService {
 		cancel:   cancel,
 		consumer: message_queue.NewConsumer(s.MaxHandlers),
 		settings: s,
+		logger:   logging.GetLogger(),
 	}
 }
 
 // Listen starts the listening loop for the NotificationService.
 func (s NotificationService) Listen() error {
-	fmt.Println("begin listening loop")
+	s.logger.Infoln("listening for notifications")
 	if err := s.consumer.Connect(s.settings.MQUsername, s.settings.MQPassword, s.settings.MQHostName, s.settings.MQPort); err != nil {
+		s.logger.Fatalf("can not connect to the queue: %v\n", err)
 		return err
 	}
 	return s.consumer.Listen(s.settings.Queue, func(delivery amqp.Delivery) error {
-		fmt.Println(delivery)
+		s.logger.Debugf("received notification job: %v\n", delivery)
 		return nil
 	})
 }
 
 // Push sends a notification.
-func (s NotificationService) Push(n Notification) error {
+func (s NotificationService) push(n entities.Notification) error {
 	panic("not implemented")
 }
 

@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"runtime"
+	"sync"
 )
 
 type writerHook struct {
@@ -32,7 +33,10 @@ func (hook *writerHook) Levels() []logrus.Level {
 	return hook.LogLevels
 }
 
-var e *logrus.Entry
+var (
+	e    *logrus.Entry
+	once sync.Once
+)
 
 type Logger struct {
 	*logrus.Entry
@@ -72,4 +76,8 @@ func InitLogger() {
 	l.SetLevel(logrus.TraceLevel)
 	e = logrus.NewEntry(l)
 	e.Infoln("Logger created")
+}
+
+func init() {
+	once.Do(InitLogger)
 }
