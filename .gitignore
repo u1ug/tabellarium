@@ -20,8 +20,8 @@
 # Go workspace file
 go.work
 /test/
-/fcm/
-/node_modules/
 /node_modules/
 /package.json
 /package-lock.json
+/logs/
+.idea
