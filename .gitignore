@@ -19,3 +19,9 @@
 
 # Go workspace file
 go.work
+/test/
+/node_modules/
+/package.json
+/package-lock.json
+/logs/
+.idea

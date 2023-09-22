@@ -1,2 +1,2 @@
 # tabellarium
-Notification microservice for Android and iOS 
+Notification microservice for expo.
