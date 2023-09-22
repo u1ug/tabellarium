@@ -4,7 +4,7 @@ import "github.com/valyala/fastjson"
 
 // Notification represents message payload from RabbitMQ.
 type Notification struct {
-	To    []string
+	To    []string // List of user IDs for notification sending
 	Title string
 	Body  string
 	Data  string
