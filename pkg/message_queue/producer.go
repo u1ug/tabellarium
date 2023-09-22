@@ -90,6 +90,8 @@ func (p *Producer) Listen() error {
 			err := p.ch.PublishWithContext(p.ctx, message.Exchange, message.Key, message.Mandatory, message.Immediate, pub)
 			if err != nil {
 				p.logger.Errorln(err)
+			} else {
+				p.logger.Debugln("delivered new message")
 			}
 		case <-p.ctx.Done():
 			p.logger.Println("exiting listening loop")
