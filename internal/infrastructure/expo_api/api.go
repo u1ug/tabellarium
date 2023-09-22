@@ -1,4 +1,4 @@
-package infrastructure
+package expo_api
 
 import (
 	"github.com/valyala/fasthttp"
@@ -18,7 +18,6 @@ func SendNotification(n *entities.Notification) (error, []byte) {
 	req.Header.SetContentType("application/json")
 	payload := n.Serialize()
 	req.SetBody(payload)
-
 	err := fasthttp.Do(req, resp)
 	if err != nil {
 		return err, nil
