@@ -1,0 +1,21 @@
+{
+  "service": {
+    "address": "0.0.0.0",
+    "port:": 8080
+  },
+  "rabbitMQ": {
+    "queue": "Notifications",
+    "maxHandlers": 10000,
+    "MQUsername": "guest",
+    "MQPassword": "guest",
+    "MQHostName": "localhost",
+    "MQPort": 5672
+  },
+  "redis": {
+    "RedisAddress": "localhost",
+    "RedisPort": 6379,
+    "RedisDB": 0,
+    "RedisPassword": "",
+    "RedisTTL": 2628000
+  }
+}
